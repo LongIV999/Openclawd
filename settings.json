@@ -1,0 +1,15 @@
+{
+    "enabledPlugins": {
+        "orchestrator@kuckit": true
+    },
+    "env": {
+        "ANTHROPIC_API_KEY": "sk-6d22c69248e74b48a49cfb80a5ccdb84",
+        "ANTHROPIC_BASE_URL": "http://127.0.0.1:8045"
+    },
+    "language": "vietnamese",
+    "model": "gemini-claude-opus-4-5-thinking",
+    "permissions": {
+        "allow": [],
+        "deny": []
+    }
+}
