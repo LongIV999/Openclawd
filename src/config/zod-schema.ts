@@ -13,6 +13,19 @@ import {
   SessionSendPolicySchema,
 } from "./zod-schema.session.js";
 
+const ObsidianSchema = z
+  .object({
+    defaultVault: z.string().optional(),
+    autoLinkEnabled: z.boolean().optional(),
+    autoTagEnabled: z.boolean().optional(),
+    dailyNoteTemplate: z.string().optional(),
+    inboxFolder: z.string().optional(),
+    archiveFolder: z.string().optional(),
+    vietnameseSupport: z.boolean().optional(),
+  })
+  .strict()
+  .optional();
+
 const BrowserSnapshotDefaultsSchema = z
   .object({
     mode: z.literal("efficient").optional(),
@@ -335,6 +348,7 @@ export const OpenClawSchema = z
       .strict()
       .optional(),
     channels: ChannelsSchema,
+    obsidian: ObsidianSchema,
     discovery: z
       .object({
         wideArea: z
@@ -632,7 +646,7 @@ export const OpenClawSchema = z
       .strict()
       .optional(),
   })
-  .strict()
+  .passthrough()
   .superRefine((cfg, ctx) => {
     const agents = cfg.agents?.list ?? [];
     if (agents.length === 0) {

@@ -55,7 +55,21 @@ import {
   resolveTelegramForumThreadId,
   resolveTelegramThreadSpec,
 } from "./bot/helpers.js";
+import {
+  handleNoteCommand,
+  handleTaskCommand,
+  handleIdeaCommand,
+  handleJournalCommand,
+} from "./obsidian-bridge.js";
+
 import { buildInlineKeyboard } from "./send.js";
+import {
+  handleViralCommand,
+  handleTrendCommand,
+  handleHuntAICommand,
+  handleHuntCommand,
+  getViralHelpText,
+} from "./viral-bridge.js";
 
 const EMPTY_RESPONSE_FALLBACK = "No response generated. Please try again.";
 
@@ -361,6 +375,57 @@ export const registerTelegramNativeCommands = ({
     if (typeof (bot as unknown as { command?: unknown }).command !== "function") {
       logVerbose("telegram: bot.command unavailable; skipping native handlers");
     } else {
+      // Obsidian Native Commands (Custom Handlers)
+      // These must be registered BEFORE the generic loop to take precedence.
+      bot.command(["note", "n", "N"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        if (!content) return ctx.reply("Please provide content for the note.");
+        await handleNoteCommand(ctx, cfg, content);
+      });
+
+      bot.command(["task", "todo"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        if (!content) return ctx.reply("Please provide a task description.");
+        await handleTaskCommand(ctx, cfg, content);
+      });
+
+      bot.command(["idea", "i", "I"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        if (!content) return ctx.reply("Please provide your idea.");
+        await handleIdeaCommand(ctx, cfg, content);
+      });
+
+      bot.command(["journal", "log", "j", "J"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        if (!content) return ctx.reply("Please provide a journal entry.");
+        await handleJournalCommand(ctx, cfg, content);
+      });
+
+      // Viral Content Hunter Commands
+      bot.command(["viral", "v"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        await handleViralCommand(ctx, cfg, content);
+      });
+
+      bot.command(["trend", "trending"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        await handleTrendCommand(ctx, cfg, content);
+      });
+
+      bot.command(["huntai"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        await handleHuntAICommand(ctx, cfg, content);
+      });
+
+      bot.command(["hunt"], async (ctx) => {
+        const content = typeof ctx.match === "string" ? ctx.match : "";
+        await handleHuntCommand(ctx, cfg, content);
+      });
+
+      bot.command("viralhelp", async (ctx) => {
+        await ctx.reply(getViralHelpText(), { parse_mode: "Markdown" });
+      });
+
       for (const command of nativeCommands) {
         bot.command(command.name, async (ctx: TelegramNativeCommandContext) => {
           const msg = ctx.message;

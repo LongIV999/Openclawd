@@ -27,6 +27,26 @@ export const DEFAULT_PROMPT: Record<MediaUnderstandingCapability, string> = {
   video: "Describe the video.",
 };
 export const DEFAULT_VIDEO_MAX_BASE64_BYTES = 70 * MB;
+
+// Video optimization defaults
+export const DEFAULT_VIDEO_OPTIMIZATION = {
+  enabled: true,
+  streaming: {
+    enabled: true,
+    chunkDuration: 30, // seconds per chunk
+    maxChunks: 10,
+  },
+  caching: {
+    enabled: true,
+    maxEntries: 50,
+    maxSizeMB: 100,
+  },
+  adaptive: {
+    longVideoThreshold: 1800, // 30 minutes
+    previewDuration: 120, // 2 minutes
+    maxPreviewSizeMB: 10,
+  },
+};
 export const DEFAULT_AUDIO_MODELS: Record<string, string> = {
   groq: "whisper-large-v3-turbo",
   openai: "gpt-4o-mini-transcribe",

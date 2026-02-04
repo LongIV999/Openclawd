@@ -41,6 +41,7 @@ import {
   type ProviderInfo,
 } from "./model-buttons.js";
 import { buildInlineKeyboard } from "./send.js";
+import { wasSentByBot } from "./sent-message-cache.js";
 
 export const registerTelegramHandlers = ({
   cfg,
@@ -639,6 +640,9 @@ export const registerTelegramHandlers = ({
       if (!msg?.migrate_to_chat_id) {
         return;
       }
+      if (msg.from?.is_bot) {
+        return;
+      }
       if (shouldSkipUpdate(ctx)) {
         return;
       }
@@ -690,6 +694,28 @@ export const registerTelegramHandlers = ({
       if (!msg) {
         return;
       }
+      // IGNORE MESSAGES FROM BOTS (Prevent loops)
+      if (msg.from?.is_bot) {
+        return;
+      }
+      // IGNORE AUTOMATIC FORWARDS FROM LINKED CHANNELS (Prevent loops)
+      if (msg.is_automatic_forward) {
+        return;
+      }
+      // IGNORE MESSAGES FROM SELF (In case of weird forwarding/anonymity)
+      if (ctx.me && msg.from?.id === ctx.me.id) {
+        return;
+      }
+      // IGNORE SELF (Cache check)
+      if (wasSentByBot(msg.chat.id, msg.message_id)) {
+        return;
+      }
+      if (msg.text) {
+        console.log(
+          `[DEBUG] Incoming Telegram Message from ${msg.chat.id}: ${msg.text.slice(0, 100)}...`,
+        );
+      }
+
       if (shouldSkipUpdate(ctx)) {
         return;
       }

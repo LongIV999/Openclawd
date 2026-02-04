@@ -575,6 +575,55 @@ function buildChatCommands(): ChatCommandDefinition[] {
     ...listChannelDocks()
       .filter((dock) => dock.capabilities.nativeCommands)
       .map((dock) => defineDockCommand(dock)),
+    defineChatCommand({
+      key: "note",
+      nativeName: "note",
+      description: "Create a note in Obsidian.",
+      textAlias: "/note",
+      category: "tools",
+      acceptsArgs: true,
+      args: [
+        { name: "content", description: "Note content", type: "string", captureRemaining: true },
+      ],
+    }),
+    defineChatCommand({
+      key: "task",
+      nativeName: "task",
+      description: "Add a task to Obsidian.",
+      textAlias: "/task",
+      category: "tools",
+      acceptsArgs: true,
+      args: [
+        {
+          name: "content",
+          description: "Task description",
+          type: "string",
+          captureRemaining: true,
+        },
+      ],
+    }),
+    defineChatCommand({
+      key: "idea",
+      nativeName: "idea",
+      description: "Capture an idea in Obsidian.",
+      textAlias: "/idea",
+      category: "tools",
+      acceptsArgs: true,
+      args: [
+        { name: "content", description: "Idea content", type: "string", captureRemaining: true },
+      ],
+    }),
+    defineChatCommand({
+      key: "journal",
+      nativeName: "journal",
+      description: "Add a journal entry to Obsidian.",
+      textAlias: "/journal",
+      category: "tools",
+      acceptsArgs: true,
+      args: [
+        { name: "content", description: "Journal entry", type: "string", captureRemaining: true },
+      ],
+    }),
   ];
 
   registerAlias(commands, "whoami", "/id");
@@ -582,6 +631,12 @@ function buildChatCommands(): ChatCommandDefinition[] {
   registerAlias(commands, "verbose", "/v");
   registerAlias(commands, "reasoning", "/reason");
   registerAlias(commands, "elevated", "/elev");
+
+  // Obsidian Integration Commands
+  registerAlias(commands, "note", "/n");
+  registerAlias(commands, "task", "/todo"); // Removed /t collision
+  registerAlias(commands, "idea", "/i");
+  registerAlias(commands, "journal", "/log", "/j");
 
   assertCommandRegistry(commands);
   return commands;

@@ -11,5 +11,26 @@
     "permissions": {
         "allow": [],
         "deny": []
+    },
+    "vietnamese": {
+        "locale": "vi-VN",
+        "timezone": "Asia/Ho_Chi_Minh",
+        "dateFormat": "DD/MM/YYYY",
+        "timeFormat": "24h",
+        "currency": "VND",
+        "numberFormat": {
+            "thousandsSeparator": ".",
+            "decimalSeparator": ","
+        },
+        "formality": "polite",
+        "culturalContext": true,
+        "tonePreservation": true
+    },
+    "obsidian": {
+        "vietnameseSupport": true,
+        "autoLinkEnabled": true,
+        "autoTagEnabled": true,
+        "inboxFolder": "Inbox",
+        "archiveFolder": "Archive"
     }
 }

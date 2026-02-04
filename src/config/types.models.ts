@@ -60,8 +60,35 @@ export type BedrockDiscoveryConfig = {
   defaultMaxTokens?: number;
 };
 
+import type { CostControls } from "../usage/types.js";
+
+export type CostOptimization = {
+  enabled: boolean;
+  budgetLimits: {
+    daily?: number;
+    weekly?: number;
+    monthly?: number;
+  };
+  caching: {
+    enabled: boolean;
+    ttl: number;
+    maxSize: number;
+  };
+  alerts: {
+    budgetThresholds: number[];
+    dailyReports: boolean;
+  };
+  modelOptimization: {
+    enabled: boolean;
+    costSensitivity: "low" | "medium" | "high";
+    performanceWeight: number;
+  };
+  budgetControls?: CostControls;
+};
+
 export type ModelsConfig = {
   mode?: "merge" | "replace";
   providers?: Record<string, ModelProviderConfig>;
   bedrockDiscovery?: BedrockDiscoveryConfig;
+  costOptimization?: CostOptimization;
 };
