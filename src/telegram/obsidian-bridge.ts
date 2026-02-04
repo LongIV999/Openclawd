@@ -8,7 +8,9 @@ const logger = getChildLogger({ module: "telegram-obsidian-bridge" });
 let obsidianClient: ObsidianClient | null = null;
 
 function getObsidianClient(cfg: OpenClawConfig): ObsidianClient | null {
-  if (obsidianClient) return obsidianClient;
+  if (obsidianClient) {
+    return obsidianClient;
+  }
 
   if (!cfg.obsidian) {
     logger.warn("Obsidian config is missing");

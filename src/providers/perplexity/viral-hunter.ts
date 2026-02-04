@@ -240,10 +240,15 @@ Tập trung vào góc nhìn công nghệ, startup, developer, AI.`;
 
     const platformRaw = getField("NỀN TẢNG").toLowerCase();
     let platform: ViralPost["platform"] = "other";
-    if (platformRaw.includes("reddit")) platform = "reddit";
-    else if (platformRaw.includes("x") || platformRaw.includes("twitter")) platform = "x";
-    else if (platformRaw.includes("thread")) platform = "threads";
-    else if (platformRaw.includes("hacker") || platformRaw.includes("hn")) platform = "hacker_news";
+    if (platformRaw.includes("reddit")) {
+      platform = "reddit";
+    } else if (platformRaw.includes("x") || platformRaw.includes("twitter")) {
+      platform = "x";
+    } else if (platformRaw.includes("thread")) {
+      platform = "threads";
+    } else if (platformRaw.includes("hacker") || platformRaw.includes("hn")) {
+      platform = "hacker_news";
+    }
 
     return {
       title,

@@ -28,7 +28,9 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 function getApiKey(cfg: OpenClawConfig): string | undefined {
   // Check config first
   const configKey = (cfg as any).perplexity?.apiKey;
-  if (configKey) return configKey;
+  if (configKey) {
+    return configKey;
+  }
 
   // Fall back to environment
   return process.env.PERPLEXITY_API_KEY;
@@ -39,7 +41,9 @@ function getApiKey(cfg: OpenClawConfig): string | undefined {
  */
 function getCachedResult(cacheKey: string): ViralHuntResult | null {
   const cached = requestCache.get(cacheKey);
-  if (!cached) return null;
+  if (!cached) {
+    return null;
+  }
 
   if (Date.now() - cached.timestamp > CACHE_TTL_MS) {
     requestCache.delete(cacheKey);
@@ -286,9 +290,15 @@ function optionsToArgs(options: HuntOptions): string {
       args.push(`--${p === "hacker_news" ? "hn" : p}`);
     }
   }
-  if (options.recency === "week") args.push("--week");
-  if (options.maxPosts) args.push(`--count=${options.maxPosts}`);
-  if (options.language === "en") args.push("--en");
+  if (options.recency === "week") {
+    args.push("--week");
+  }
+  if (options.maxPosts) {
+    args.push(`--count=${options.maxPosts}`);
+  }
+  if (options.language === "en") {
+    args.push("--en");
+  }
 
   return args.join(" ");
 }

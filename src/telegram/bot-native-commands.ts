@@ -379,25 +379,33 @@ export const registerTelegramNativeCommands = ({
       // These must be registered BEFORE the generic loop to take precedence.
       bot.command(["note", "n", "N"], async (ctx) => {
         const content = typeof ctx.match === "string" ? ctx.match : "";
-        if (!content) return ctx.reply("Please provide content for the note.");
+        if (!content) {
+          return ctx.reply("Please provide content for the note.");
+        }
         await handleNoteCommand(ctx, cfg, content);
       });
 
       bot.command(["task", "todo"], async (ctx) => {
         const content = typeof ctx.match === "string" ? ctx.match : "";
-        if (!content) return ctx.reply("Please provide a task description.");
+        if (!content) {
+          return ctx.reply("Please provide a task description.");
+        }
         await handleTaskCommand(ctx, cfg, content);
       });
 
       bot.command(["idea", "i", "I"], async (ctx) => {
         const content = typeof ctx.match === "string" ? ctx.match : "";
-        if (!content) return ctx.reply("Please provide your idea.");
+        if (!content) {
+          return ctx.reply("Please provide your idea.");
+        }
         await handleIdeaCommand(ctx, cfg, content);
       });
 
       bot.command(["journal", "log", "j", "J"], async (ctx) => {
         const content = typeof ctx.match === "string" ? ctx.match : "";
-        if (!content) return ctx.reply("Please provide a journal entry.");
+        if (!content) {
+          return ctx.reply("Please provide a journal entry.");
+        }
         await handleJournalCommand(ctx, cfg, content);
       });
 

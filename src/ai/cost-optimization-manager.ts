@@ -345,7 +345,7 @@ export class CostOptimizationManager {
         : ["openai", modelStr];
       return { provider, model };
     } else if (modelConfig && typeof modelConfig === "object" && modelConfig.primary) {
-      const primary = modelConfig.primary as string;
+      const primary = modelConfig.primary;
       // Parse "provider/model" format
       const [provider, model] = primary.includes("/") ? primary.split("/", 2) : ["openai", primary];
       return { provider, model };

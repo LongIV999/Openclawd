@@ -20,7 +20,9 @@ export class ObsidianClient {
   }
 
   private async getVaultPath(): Promise<string> {
-    if (this.vaultPath) return this.vaultPath;
+    if (this.vaultPath) {
+      return this.vaultPath;
+    }
 
     if (this.config.defaultVault) {
       // If default vault is set in config, try to resolve it from obsidian.json or just assume it's the name if we can't read obsidian.json
@@ -33,7 +35,7 @@ export class ObsidianClient {
       const { stdout } = await execAsync("obsidian-cli print-default --path-only");
       this.vaultPath = stdout.trim();
       return this.vaultPath;
-    } catch (error) {
+    } catch {
       if (this.config.defaultVault) {
         // Fallback: This assumes the user might have set up the vault manually or we are in a customized environment
         // We can try to set it via obsidian-cli if it's not set
@@ -45,7 +47,7 @@ export class ObsidianClient {
           throw new Error(
             "Could not resolve default vault. Please run `obsidian-cli set-default <vault-name>`.",
           );
-        } catch (e) {
+        } catch {
           throw new Error(
             "Could not resolve default vault. Please run `obsidian-cli set-default <vault-name>`.",
           );
@@ -176,10 +178,11 @@ tags: [daily, journal]
   private generateTitle(content: string): string {
     // Take first line or first few words
     const firstLine = content.split("\n")[0].trim();
-    if (firstLine.length < 50)
+    if (firstLine.length < 50) {
       return removeVietnameseTones(firstLine)
         .replace(/[^a-zA-Z0-9 ]/g, "")
         .trim();
+    }
     return (
       removeVietnameseTones(firstLine.slice(0, 50))
         .replace(/[^a-zA-Z0-9 ]/g, "")
@@ -207,7 +210,9 @@ tags: [daily, journal]
 
       // Find other notes that mention this title
       for (const otherNotePath of allNotes) {
-        if (notePath === otherNotePath) continue;
+        if (notePath === otherNotePath) {
+          continue;
+        }
 
         const otherContent = readFileSync(otherNotePath, "utf-8");
         const normalizedTitle = removeVietnameseTones(title.toLowerCase());
@@ -265,7 +270,9 @@ tags: [daily, journal]
     let results: string[] = [];
     const list = readdirSync(dir);
     for (const file of list) {
-      if (file.startsWith(".")) continue;
+      if (file.startsWith(".")) {
+        continue;
+      }
       const fullPath = join(dir, file);
       const stat = statSync(fullPath);
       if (stat.isDirectory()) {
