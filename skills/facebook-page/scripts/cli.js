@@ -190,15 +190,55 @@ postCmd
   .requiredOption("--page <id>", "Page ID")
   .option("--message <text>", "Post message")
   .option("--photo <path>", "Path to photo file")
+  .option(
+    "--photos <paths>",
+    "Comma-separated photo paths for a multi-image (carousel) post. Example: a.jpg,b.jpg,c.jpg"
+  )
   .option("--link <url>", "URL to share")
   .action(async (opts) => {
     const tokens = loadTokens();
     const pageToken = getPageToken(tokens, opts.page);
-    
+
     let result;
-    
-    if (opts.photo) {
-      // Photo post
+
+    if (opts.photos) {
+      // Multi-image (carousel) post
+      if (!opts.message) {
+        console.error("Error: --message is required for multi-image posts");
+        process.exit(1);
+      }
+
+      const paths = String(opts.photos)
+        .split(",")
+        .map((p) => p.trim())
+        .filter(Boolean);
+
+      if (paths.length < 2) {
+        console.error("Error: --photos must include at least 2 image paths");
+        process.exit(1);
+      }
+
+      // 1) Upload each photo as unpublished
+      const mediaIds = [];
+      for (const p of paths) {
+        const fields = { published: "false" };
+        const up = await apiPostMultipart(`${opts.page}/photos`, pageToken, fields, p);
+        if (!up.id) {
+          console.error("Error: upload did not return photo id");
+          process.exit(1);
+        }
+        mediaIds.push(up.id);
+      }
+
+      // 2) Create feed post with attached_media
+      const body = { message: opts.message };
+      mediaIds.forEach((id, idx) => {
+        body[`attached_media[${idx}]`] = JSON.stringify({ media_fbid: id });
+      });
+
+      result = await apiPost(`${opts.page}/feed`, pageToken, body);
+    } else if (opts.photo) {
+      // Single photo post
       const fields = {};
       if (opts.message) fields.message = opts.message;
       result = await apiPostMultipart(`${opts.page}/photos`, pageToken, fields, opts.photo);
@@ -215,7 +255,7 @@ postCmd
       }
       result = await apiPost(`${opts.page}/feed`, pageToken, { message: opts.message });
     }
-    
+
     console.log(`Post created! ID: ${result.id || result.post_id}`);
   });
 
@@ -239,6 +279,25 @@ postCmd
 // ============ COMMENTS ============
 
 const commentsCmd = program.command("comments").description("Comment operations");
+
+commentsCmd
+  .command("create")
+  .description("Create a comment on a post")
+  .requiredOption("--post <id>", "Post ID")
+  .requiredOption("--message <text>", "Comment message")
+  .option(
+    "--page <id>",
+    "Page ID to comment as the Page (uses stored page token). If omitted, uses user token."
+  )
+  .action(async (opts) => {
+    const tokens = loadTokens();
+    const token = opts.page ? getPageToken(tokens, opts.page) : tokens.user_token;
+
+    const result = await apiPost(`${opts.post}/comments`, token, {
+      message: opts.message,
+    });
+    console.log(`Comment posted! ID: ${result.id}`);
+  });
 
 commentsCmd
   .command("list")

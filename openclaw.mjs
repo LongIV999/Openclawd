@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+console.log("[openclaw.mjs] BEGIN");
+
 
 import module from "node:module";
 

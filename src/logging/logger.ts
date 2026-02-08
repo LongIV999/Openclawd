@@ -55,6 +55,7 @@ function resolveSettings(): ResolvedSettings {
     (loggingState.overrideSettings as LoggerSettings | null) ?? readLoggingConfig();
   if (!cfg) {
     try {
+      console.log("[logger] Requiring ../config/config.js...");
       const loaded = requireConfig("../config/config.js") as {
         loadConfig?: () => OpenClawConfig;
       };
