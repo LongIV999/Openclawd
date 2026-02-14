@@ -1,0 +1,17 @@
+/* Brutalist Code - Raw, Bold, High Contrast */
+/* Target the inner frame div that has the background */
+#frame>div {
+    background-image: none !important;
+    background-color: #FF5722 !important;
+    /* Deep Orange */
+}
+
+/* Target the window container inside */
+#frame>div>div {
+    background: #111 !important;
+    border: 4px solid #000 !important;
+    border-radius: 0 !important;
+    /* No rounded corners */
+    box-shadow: 12px 12px 0px #000 !important;
+    /* Hard shadow */
+}

@@ -1,0 +1,15 @@
+/* Tech Noir - Dark, Neon, Hacker */
+/* Target the inner frame div that has the background */
+#frame>div {
+    background-image: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%) !important;
+    background-color: transparent !important;
+}
+
+/* Target the window container inside */
+#frame>div>div {
+    background: rgba(16, 20, 24, 0.7) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 255, 255, 0.2) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+}

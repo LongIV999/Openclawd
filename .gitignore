@@ -84,3 +84,10 @@ USER.md
 !.agent/workflows/
 /local/
 package-lock.json
+
+# Local artifacts (do not commit)
+debug-info.txt
+skills/open_memory/data/*.db
+skills/open_memory/data/*.sqlite
+skills/open_memory/**/__pycache__/
+skills/open_memory/**/*.pyc
